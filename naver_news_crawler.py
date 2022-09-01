@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-# naver 뉴스 랭킹 url
-url = 'https://news.naver.com/main/ranking/popularDay.naver?mid=etc&sid1=111'
+# naver 뉴스 랭킹 url - 댓글 많은 뉴스
+url = 'https://news.naver.com/main/ranking/popularMemo.naver'
 
 # 크롤링을 차단을 피하기 위해 헤더 정보 삽입
 headers = {
@@ -12,7 +12,7 @@ headers = {
 # 페이지 요청
 res = requests.get(url, headers=headers)
 
-soup = BeautifulSoup(res.text, 'html.parser')
+soup = BeautifulSoup(res.text, 'lxml')
 
 ranking_boxes = soup.find_all('div', 'rankingnews_box')
 
