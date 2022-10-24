@@ -14,41 +14,52 @@ headers = {
 }
 
 webpage = requests.get(url, headers=headers)
+
 soup = BeautifulSoup(webpage.content, 'lxml')
 
-article_title = soup.find('span', attrs={'class':'title_subject'}).get_text().strip()
 
-nickname = soup.find('span', attrs={'class':'nickname'}).get_text().strip()
+# ---------------------------본문 내용 출력 테스트-----------------------------------------
+article_title = soup.find('span', attrs={'class': 'title_subject'}).get_text().strip()
 
-ip_address = soup.find('span', attrs={'class':'ip'}).get_text().strip()
+nickname = soup.find('span', attrs={'class': 'nickname'}).get_text().strip()
 
-view_cnt = soup.find('span', attrs={'class':'gall_count'}).get_text().strip()
+ip_address = soup.find('span', attrs={'class': 'ip'}).get_text().strip()
 
-comment_cnt = soup.find('span', attrs={'class':'gall_comment'}).get_text().strip()
+view_cnt = soup.find('span', attrs={'class': 'gall_count'}).get_text().strip()
+
+comment_cnt = soup.find('span', attrs={'class': 'gall_comment'}).get_text().strip()
+cmt_cnt = comment_cnt.replace('댓글', '')
+print(int(cmt_cnt))
 
 content_all = soup.find('div', attrs={'class': 'writing_view_box'})
 content = content_all.p.get_text().strip()
 
-reg_dtime = soup.find('span', attrs={'class':'gall_date'}).get_text().strip()
+reg_dtime = soup.find('span', attrs={'class': 'gall_date'}).get_text().strip()
 
-article_data = (article_title, nickname,
-                ip_address, view_cnt, comment_cnt, content, reg_dtime)
-
+article_data = (article_title, nickname, ip_address, view_cnt, comment_cnt, content, reg_dtime)
 print(article_data)
 
-f = open('dc_crawling_result.csv', 'a', encoding='utf8')
-for i in article_data:
-    f.write(str(i) + ", ")
-f.close()
+# ---------------------------댓글 출력 테스트----------------------------------
+comments = []
+comment_elements = soup.find_all('li', attrs={'class': 'ub-content'})
+print(comment_elements)
 
-# xpath 방식 접근 실패 (BeautifulSoup 공식 지원 X)
-# dom = etree.HTML(str(soup))
-# print(dom.xpath('//*[@id="container"]/section/article[2]/div[1]/div/div[1]/div[1]/div[3]/p')[0].text)
+anickname = soup.find_all(class_='ub-writer')
+print(anickname)
 
+for element in comment_elements:
+    nickname = soup.find('em', attrs={'title': '닉네임'})
+    body = element.find('p', attrs={'class': 'ub-word'})
+    user_ip = '' if nickname else body.find('span').extract().text
+    timestamp = element.find('span', attrs={'class': 'date_time'}).text
 
-# # XPath
-# //*[@id="container"]/section/article[2]/div[1]/div/div[1]/div[1]/div[3]/p
-# # JS 경로
-# document.querySelector("#container > section > article:nth-child(3) > div.view_content_wrap > div > div.inner.clear > div.writing_view_box > div.write_div > p")
-# # selector
-# #container > section > article:nth-child(3) > div.view_content_wrap > div > div.inner.clear > div.writing_view_box > div.write_div > p
+    comment = {
+        'user_ip': user_ip,
+        'nickname': nickname,
+        'written_at': timestamp,
+        'body': body.text.strip()
+    }
+
+    comments.append(comment)
+
+print(comments)
