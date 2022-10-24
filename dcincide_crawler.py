@@ -44,8 +44,8 @@ comments = []
 comment_elements = soup.find_all('li', attrs={'class': 'ub-content'})
 print(comment_elements)
 
-anickname = soup.find_all(class_='ub-writer')
-print(anickname)
+nickname_all = soup.find_all(class_='ub-writer')
+print(nickname_all)
 
 for element in comment_elements:
     nickname = soup.find('em', attrs={'title': '닉네임'})
