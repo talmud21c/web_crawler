@@ -1,35 +1,41 @@
-import requests
-from bs4 import BeautifulSoup
+import uglysoup
 
-url = 'https://www.fmkorea.com/best/5147032699'
 
-session = requests.Session()
-session.get('https://www.fmkorea.com/best/5147032699')
+def main(url):
+    soup = uglysoup.get_soup(url)
 
-headers = {
-    'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-}
+    # ----------본문 내용 크롤링
+    article_title = soup.find('span', attrs={'class': 'np_18px_span'}).get_text().strip()
 
-webpage = requests.get(url, headers=headers)
+    created_at = soup.find('span', attrs={'class': 'date'}).get_text().strip()
 
-soup = BeautifulSoup(webpage.content, 'lxml')
+    content = soup.find('div', attrs={'class': 'xe_content'}).get_text().strip()
 
-# 본문 내용 크롤링
-article_title = soup.find('div', attrs={'class': 'xe_content'}).get_text().strip()
-print(article_title)
+    nickname = soup.find('a', attrs={'class': 'nick'}).get_text().strip()
 
-nickname = soup.find('a', attrs={'class': 'nick'}).get_text().strip()
-print(nickname)
+    # 조회수, 추천수, 댓글 부분은 class가 없는 b 태그로 작성되어 있어 전체 b태그 검색 후 순서에 따라 추출
+    elements = soup.find_all('b')
 
-elements = soup.find_all('b')
+    # 조회 수
+    view_cnt = elements[0].string
+    # 추천 수
+    recommend_cnt = elements[1].string
+    # 댓글 수
+    comment_cnt = elements[2].string
 
-view_cnt = elements[0].string
-print(view_cnt)
+    article_data = (article_title, created_at, content, nickname, view_cnt, recommend_cnt, comment_cnt)
+    print(article_data)
 
-recommend_cnt = elements[1].string
-print(recommend_cnt)
+    # -----------댓글 크롤링
+    comments = []
+    comment_all = soup.find_all('div', attrs={'class': 'xe_content'})
+    for comment in comment_all:
+        comments.append(comment.get_text().strip())
+    # 배열의 첫 번째 항목이 본문의 내용이므로 삭제
+    # del comments[0]
+    print(comments)
 
-comment_cnt = elements[2].string
-print(comment_cnt)
 
+if __name__ == '__main__':
+    url = input('에펨코리아 게시글 url을 입력해주세요: ')
+    main(url)

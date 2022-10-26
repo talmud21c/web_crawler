@@ -1,77 +1,68 @@
-import requests
-from bs4 import BeautifulSoup
-from lxml import etree
-import pandas as pd
-
-url = 'https://gall.dcinside.com/board/view/?id=programming&no=2286571&page=1'
-
-session = requests.Session()
-session.get('https://gall.dcinside.com/board/view/?id=programming&no=2286571&page=1')
-
-headers = {
-    'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-}
-
-webpage = requests.get(url, headers=headers)
-
-soup = BeautifulSoup(webpage.content, 'lxml')
+import uglysoup
 
 
-# ---------------------------본문 내용 출력 테스트-----------------------------------------
-# 글 제목
-article_title = soup.find('span', attrs={'class': 'title_subject'}).get_text().strip()
+def main(url):
+    soup = uglysoup.get_soup(url)
 
-#작성자
-nickname = soup.find('span', attrs={'class': 'nickname'}).get_text().strip()
+    # ---------------------------본문 내용 출력 테스트-----------------------------------------
+    # 글 제목
+    article_title = soup.find('span', attrs={'class': 'title_subject'}).get_text().strip()
 
-# 작성자 ip
-ip_address = soup.find('span', attrs={'class': 'ip'}).get_text().strip()
+    #작성자
+    nickname = soup.find('span', attrs={'class': 'nickname'}).get_text().strip()
 
-# 조회 수
-view_cnt = soup.find('span', attrs={'class': 'gall_count'}).get_text().strip()
+    # 작성자 ip
+    ip_address = soup.find('span', attrs={'class': 'ip'}).get_text().strip()
 
-# 댓글 수
-comment_cnt = soup.find('span', attrs={'class': 'gall_comment'}).get_text().strip()
-cmt_cnt = comment_cnt.replace('댓글', '')
-print(int(cmt_cnt))
+    # 조회 수
+    view_cnt = soup.find('span', attrs={'class': 'gall_count'}).get_text().strip()
 
-# 본문 내용
-content_all = soup.find('div', attrs={'class': 'writing_view_box'})
-content = content_all.p.get_text().strip()
+    # 댓글 수
+    comment_cnt = soup.find('span', attrs={'class': 'gall_comment'}).get_text().strip()
+    cmt_cnt = comment_cnt.replace('댓글', '')
+    print(int(cmt_cnt))
 
-# 등록일
-reg_dtime = soup.find('span', attrs={'class': 'gall_date'}).get_text().strip()
+    # 본문 내용
+    content_all = soup.find('div', attrs={'class': 'writing_view_box'})
+    content = content_all.p.get_text().strip()
 
-article_data = (article_title, nickname, ip_address, view_cnt, comment_cnt, content, reg_dtime)
-print(article_data)
+    # 등록일
+    reg_dtime = soup.find('span', attrs={'class': 'gall_date'}).get_text().strip()
 
-# ---------------------------댓글 출력 테스트----------------------------------
-# 일반적인 페이지 요청으로 댓글을 로드하지 못 함.
-# 스크립트로 댓글 api 호출
-comments = []
-comment_elements = soup.find_all('li', attrs={'class': 'ub-content'})
-print(comment_elements)
+    article_data = (article_title, nickname, ip_address, view_cnt, comment_cnt, content, reg_dtime)
+    print(article_data)
 
-nickname_all = soup.find_all('span', 'nickname')
-print(nickname_all)
+    # ---------------------------댓글 출력 테스트----------------------------------
+    # 일반적인 페이지 요청으로 댓글을 로드하지 못 함.
+    # 스크립트로 댓글 api 호출
+    comments = []
+    comment_elements = soup.find_all('li', attrs={'class': 'ub-content'})
+    print(comment_elements)
 
-comment = soup.find_all('p', attrs={'class': 'ub-word'})
-print(comment)
+    nickname_all = soup.find_all('span', 'nickname')
+    print(nickname_all)
 
-for element in comment_elements:
-    nickname = soup.find('em', attrs={'title': '닉네임'})
-    body = element.find('p', attrs={'class': 'ub-word'})
-    user_ip = '' if nickname else body.find('span').extract().text
-    timestamp = element.find('span', attrs={'class': 'date_time'}).text
+    comment = soup.find_all('p', attrs={'class': 'ub-word'})
+    print(comment)
 
-    comment = {
-        'user_ip': user_ip,
-        'nickname': nickname,
-        'written_at': timestamp,
-        'body': body.text.strip()
-    }
+    for element in comment_elements:
+        nickname = soup.find('em', attrs={'title': '닉네임'})
+        body = element.find('p', attrs={'class': 'ub-word'})
+        user_ip = '' if nickname else body.find('span').extract().text
+        timestamp = element.find('span', attrs={'class': 'date_time'}).text
 
-    comments.append(comment)
+        comment = {
+            'user_ip': user_ip,
+            'nickname': nickname,
+            'written_at': timestamp,
+            'body': body.text.strip()
+        }
 
-print(comments)
+        comments.append(comment)
+
+    print(comments)
+
+
+if __name__ == '__main__':
+    url = input('디시인사이드 게시글 주소를 입력해주세요: ')
+    main(url)
