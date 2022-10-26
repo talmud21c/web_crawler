@@ -34,7 +34,7 @@ def main(url):
 
     # ---------------------------댓글 출력 테스트----------------------------------
     # 일반적인 페이지 요청으로 댓글을 로드하지 못 함.
-    # 스크립트로 댓글 api 호출
+    # 댓글 요청은 post로 요청
     comments = []
     comment_elements = soup.find_all('li', attrs={'class': 'ub-content'})
     print(comment_elements)
