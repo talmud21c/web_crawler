@@ -1,3 +1,6 @@
+import urllib.parse
+from urllib.request import Request
+
 import requests
 from bs4 import BeautifulSoup
 import websocket
@@ -6,6 +9,12 @@ import json
 
 url = 'https://gall.dcinside.com/board/comment/'
 
+headers = {
+    'Accept': 'application/json, text/javascript, */*; q=0.01'
+    }
+
+session = requests.Session()
+session.post(url)
 
 payload = {
     'id': 'dcbest',
@@ -22,9 +31,14 @@ payload = {
     '_GALLTYPE': 'G'
 }
 
-response = requests.post(url, payload)
+# 페이로드 인코딩
+# payload = urllib.parse.urlencode(payload)
+# payload = payload.encode('utf-8')
+# print(payload)
+
+response = requests.post(url, data=payload, headers=headers)
 print(response)
 
 soup = BeautifulSoup(response.content, 'lxml')
-print(soup.text)
+print(soup)
 
