@@ -30,7 +30,7 @@ def main(url):
 
     # 조회 수
     # soup.find('div', attrs={'class': 'user_info'})
-    view_cnt_new = soup.head.contents
+    view_cnt_new = soup.title.contents
     print(view_cnt_new)
 
     view_cnt = soup.find('span', attrs={'class': 'like'}).next_sibling.next_sibling.next_sibling
