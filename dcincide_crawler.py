@@ -27,9 +27,9 @@ def main(url):
     content = content_all.p.get_text().strip()
 
     # 등록일
-    reg_dtime = soup.find('span', attrs={'class': 'gall_date'}).get_text().strip()
+    created_at = soup.find('span', attrs={'class': 'gall_date'}).get_text().strip()
 
-    article_data = (article_title, nickname, ip_address, view_cnt, comment_cnt, content, reg_dtime)
+    article_data = (article_title, nickname, ip_address, view_cnt, comment_cnt, content, created_at)
     print(article_data)
 
     # ---------------------------댓글 출력 테스트----------------------------------

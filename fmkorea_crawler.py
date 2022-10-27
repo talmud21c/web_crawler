@@ -13,15 +13,12 @@ def main(url):
 
     nickname = soup.find('a', attrs={'class': 'nick'}).get_text().strip()
 
-    # 조회수, 추천수, 댓글 부분은 class가 없는 b 태그로 작성되어 있어 전체 b태그 검색 후 순서에 따라 추출
-    elements = soup.find_all('b')
-
     # 조회 수
-    view_cnt = elements[0].string
+    view_cnt = soup.select_one('div.btm_area.clear > div.side.fr > span:nth-child(1) > b').string
     # 추천 수
-    recommend_cnt = elements[1].string
+    recommend_cnt = soup.select_one('div.btm_area.clear > div.side.fr > span:nth-child(2) > b').string
     # 댓글 수
-    comment_cnt = elements[2].string
+    comment_cnt = soup.select_one('div.btm_area.clear > div.side.fr > span:nth-child(3) > b').string
 
     article_data = (article_title, created_at, content, nickname, view_cnt, recommend_cnt, comment_cnt)
     print(article_data)
