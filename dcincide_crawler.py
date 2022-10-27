@@ -64,5 +64,5 @@ def main(url):
 
 
 if __name__ == '__main__':
-    url = input('디시인사이드 게시글 주소를 입력해주세요: ')
-    main(url)
+    url_input = input('디시인사이드 게시글 주소를 입력해주세요: ')
+    main(url_input)

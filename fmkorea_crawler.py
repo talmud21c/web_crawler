@@ -37,5 +37,5 @@ def main(url):
 
 
 if __name__ == '__main__':
-    url = input('에펨코리아 게시글 url을 입력해주세요: ')
-    main(url)
+    url_input = input('에펨코리아 게시글 url을 입력해주세요: ')
+    main(url_input)
