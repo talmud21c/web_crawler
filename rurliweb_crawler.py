@@ -34,14 +34,16 @@ def main(url):
     comment_cnt_bucket = soup.find('strong', attrs={'class': 'reply_count'}).get_text().strip()
     comment_cnt = str(comment_cnt_bucket)[1:-1]
 
-    print('제목: ' + article_title + '\n',
-          '작성자: ' + nickname + '\n',
-          '작성일: ' + created_at + '\n',
-          '작성자 IP: ' + ip_address + '\n',
-          '본문 내용: ' + article + '\n',
-          '추천 수: ' + recommend_cnt + '\n',
-          '조회 수: ' + view_cnt + '\n',
-          '댓글 수: ' + comment_cnt)
+    print(
+        '제목: ' + article_title + '\n',
+        '작성자: ' + nickname + '\n',
+        '작성일: ' + created_at + '\n',
+        '작성자 IP: ' + ip_address + '\n',
+        '본문 내용: ' + article + '\n',
+        '추천 수: ' + recommend_cnt + '\n',
+        '조회 수: ' + view_cnt + '\n',
+        '댓글 수: ' + comment_cnt
+    )
 
     # 댓글
     comments = []
