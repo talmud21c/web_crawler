@@ -16,11 +16,11 @@ def main(url):
     # 본문 내용
     article = soup.find('div', attrs={'class': 'contentBody'}).get_text().strip()
 
-    # 추천 수
-    # like_cnt = soup.find('button', attrs={'class': 'btn_share_like'}).get_text().strip()
+    # 추천 수 - 버튼형식으로 만들어져 추출 시도중
+    # like_cnt = soup.select_one('#webzineNewsView > div.newsPart > div.news_share_area > div.share_area > button.btn_share.like').get_text().strip()
 
     # 댓글 수
-    comment = soup.find('span', attrs={'class': 'cmtContentOne'}).get_text().strip()
+    comment = soup.select_one('#webzineNewsView > div.newsPart > div.topinfo > dl.comment > dd').get_text().strip()
 
     print('제목: ' + article_title + '\n',
           '작성자: ' + author + '\n',
@@ -28,6 +28,9 @@ def main(url):
           '본문 내용: ' + article + '\n',
           '댓글: ' + comment + '\n',)
 
+    # 댓글 - DC인사이드와 같이 POST형식으로 댓글 전송받음
+
+
 if __name__ == '__main__':
-    website_url = 'https://www.inven.co.kr/webzine/news/?news=278114'
-    main(website_url)
+    url_input = input('인벤 기사 url을 입력해 주세요: ')
+    main(url_input)
