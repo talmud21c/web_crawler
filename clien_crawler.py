@@ -44,5 +44,5 @@ def main(url):
 
 
 if __name__ == '__main__':
-    url_input = 'https://www.clien.net/service/board/park/17678695?od=T33&po=0&category=0&groupCd='
+    url_input = input('클리앙 게시글 url을 입력해 주세요: ')
     main(url_input)
