@@ -36,17 +36,21 @@ def main(url):
     )
 
     # 댓글
-    comments = []
-    # comment_all = soup.find_all('div', attrs={'id': 'list_best_box_text'})
-    comment_all = soup.find_all('span', attrs={'class': 'cmt_list'})
-    print(comment_all)
+    best_comments = []
+    best_comment_all = soup.select('span.cmt_text')
+    for comment in best_comment_all:
+        best_comments.append(comment.get_text().strip())
+    print(best_comments)
 
-    for comment in comment_all:
-        comments.append(comment.get_text().strip())
-
-    print(comments)
+    # document.querySelector("#comment_span_169421878 > td:nth-child(3)")
+    common_comments = []
+    common_comment_all = soup.find_all('span', attrs={'class': 'cmt_list'})
+    for comment in common_comment_all:
+        common_comments.append(comment.get_text().strip())
+    print(common_comments)
 
 
 if __name__ == '__main__':
-    url_input = input('웃긴대학 게시글 url을 입력해 주세요: ')
+    # url_input = input('웃긴대학 게시글 url을 입력해 주세요: ')
+    url_input = 'http://web.humoruniv.com/board/humor/read.html?table=pick&pg=0&number=1190565'
     main(url_input)
