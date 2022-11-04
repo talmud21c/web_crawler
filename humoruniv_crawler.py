@@ -36,15 +36,24 @@ def main(url):
     )
 
     # 댓글
+    cmt_nick = []
+    cmt_nick_all = soup.find_all('span', attrs={'class': 'hu_nick_txt'})
+    for nick in cmt_nick_all:
+        cmt_nick.append(nick.get_text().strip())
+    print(cmt_nick)
+
     best_comments = []
-    best_comment_all = soup.select('span.cmt_text')
+    best_comment_all = soup.find_all('span', attrs={'class': 'cmt_text'})
     for comment in best_comment_all:
         best_comments.append(comment.get_text().strip())
     print(best_comments)
 
     # document.querySelector("#comment_span_169421878 > td:nth-child(3)")
+    # document.querySelector("#cmt_wrap_box > table > tbody")
+    # #list_best_box_text > span
     common_comments = []
-    common_comment_all = soup.find_all('span', attrs={'class': 'cmt_list'})
+    # common_comment_all = soup.select('wrap_cmt_new > cmt_wrap_box > list_best_box_text > span.cmt_list')
+    common_comment_all = soup.find_all('div', attrs={'id': 'wrap_cmt_new'})
     for comment in common_comment_all:
         common_comments.append(comment.get_text().strip())
     print(common_comments)
@@ -52,5 +61,7 @@ def main(url):
 
 if __name__ == '__main__':
     # url_input = input('웃긴대학 게시글 url을 입력해 주세요: ')
-    url_input = 'http://web.humoruniv.com/board/humor/read.html?table=pick&pg=0&number=1190565'
+    # 삭제된 게시글 처리방법 추후 업데이트 예정
+    # url_input = 'http://web.humoruniv.com/board/humor/read.html?table=pick&pg=0&number=1190784'
+    url_input = input('웃긴대학 게시글 url을 입력해 주세요: ')
     main(url_input)
