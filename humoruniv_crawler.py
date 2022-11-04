@@ -51,7 +51,8 @@ def main(url):
 
     # 일반 댓글
     common_comments = []
-    common_comment_all = soup.find_all('div', attrs={'id': 'list_best_box_text'})
+    # common_comment_all = soup.find_all('div', attrs={'id': 'list_best_box_text'})
+    common_comment_all = soup.find_all('span', attrs={'class': 'cmt_list'})
     for comment in common_comment_all:
         common_comments.append(comment.get_text().strip())
     # 처음에 나오는 베스트 답글 제거
