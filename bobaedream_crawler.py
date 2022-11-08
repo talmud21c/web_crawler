@@ -28,15 +28,23 @@ def main(url):
     comment_cnt = soup.find('span', attrs={'class': 'comm2'}).get_text().strip()
     new_comment_cnt = str(comment_cnt)[1:-1]
 
-    filename = title
-    f = open(filename, 'w', encoding='utf-8-sig', newline='')
+    # test text density
+    div = soup.find('div', {'class': 'content02'})
+    children = div.findChildren()
 
-    try:
-        writer = csv.writer(f)
-        writer.writerow(('제목', '작성자', '작성일', '조회수', '추천수', '본문 내용', '댓글 수'))
-        writer.writerow((title, author, created_at, view_cnt, like_cnt, article, new_comment_cnt))
-    finally:
-        f.close()
+    text_density = len(article)/len(children)
+
+    print('Text Density for <div class:content02> is {}'.format(text_density))
+
+    # filename = title
+    # f = open(filename, 'w', encoding='utf-8-sig', newline='')
+    #
+    # try:
+    #     writer = csv.writer(f)
+    #     writer.writerow(('제목', '작성자', '작성일', '조회수', '추천수', '본문 내용', '댓글 수'))
+    #     writer.writerow((title, author, created_at, view_cnt, like_cnt, article, new_comment_cnt))
+    # finally:
+    #     f.close()
 
     print(
         '제목: {}\n'.format(title),
