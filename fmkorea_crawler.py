@@ -5,12 +5,16 @@ def main(url):
     soup = uglysoup.get_soup(url)
 
     # ----------본문 내용 크롤링
+    # 제목
     article_title = soup.find('span', attrs={'class': 'np_18px_span'}).get_text().strip()
 
+    # 작성일
     created_at = soup.find('span', attrs={'class': 'date'}).get_text().strip()
 
+    # 본문 내용
     content = soup.find('div', attrs={'class': 'xe_content'}).get_text().strip()
 
+    # 작성자
     nickname = soup.find('a', attrs={'class': 'nick'}).get_text().strip()
 
     # 조회 수
@@ -20,8 +24,15 @@ def main(url):
     # 댓글 수
     comment_cnt = soup.select_one('div.btm_area.clear > div.side.fr > span:nth-child(3) > b').string
 
-    article_data = (article_title, created_at, content, nickname, view_cnt, recommend_cnt, comment_cnt)
-    print(article_data)
+    print(
+        f'제목: {article_title}\n',
+        f'작성자: {nickname}\n',
+        f'작성일: {created_at}\n',
+        f'조회수: {view_cnt}\n',
+        f'추천수: {view_cnt}\n',
+        f'댓글수: {recommend_cnt}\n',
+        f'본문 내용: {content}\n'
+    )
 
     # -----------댓글 크롤링
     comments = []
